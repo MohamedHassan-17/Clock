@@ -9,10 +9,13 @@ const display = document.getElementById("display");
 const startStopBtn = document.getElementById("startStopBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+// adding event listeners to buttons
 startStopBtn.addEventListener("click", startStop);
 resetBtn.addEventListener("click", reset);
 console.log(new Date().getTime())
 
+
+// function to start and stop the stopwatch
 function startStop() {
     if (!running) {
         startTime = new Date().getTime() - savedTime;
@@ -29,6 +32,7 @@ function startStop() {
     }
 }
 
+// function to reset the stopwatch
 function reset() {
     clearInterval(tInterval);
     savedTime = 0;
@@ -36,7 +40,7 @@ function reset() {
     running = false;
     
     startStopBtn.innerHTML = "Start";
-    display.innerHTML = "00:00:00";
+    display.innerHTML = "00:00:00:000";
 }
 
 function getShowTime() {
@@ -47,13 +51,14 @@ function getShowTime() {
     let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((difference % (1000 * 60)) / 1000);
-    // You can also add milliseconds with: let milliseconds = Math.floor((difference % 1000) / 10);
+    let milliseconds = Math.floor((difference % 1000) / 10);
 
     // Format time to ensure two digits
     hours = (hours < 10) ? "0" + hours : hours;
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
+    milliseconds = (milliseconds < 100) ? "0" + milliseconds : milliseconds;
     
     // Update the display
-    display.innerHTML = hours + ":" + minutes + ":" + seconds;
+    display.innerHTML = hours + ":" + minutes + ":" + seconds + ":" + milliseconds;
 }
