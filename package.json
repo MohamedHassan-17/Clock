@@ -20,6 +20,7 @@
   "homepage": "https://github.com/MohamedHassan-17/Clock#readme",
   "dependencies": {
     "express": "^5.2.1",
-    "mongoose": "^9.1.4"
+    "mongoose": "^9.1.4",
+    "mysql2": "^3.16.1"
   }
 }
