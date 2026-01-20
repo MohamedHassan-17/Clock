@@ -26,7 +26,9 @@ function startStop() {
     } else {
         clearInterval(tInterval);
         savedTime = new Date().getTime() - startTime;
-        
+        if (savedTime > 0) {
+            saveTimeToDatabase(savedTime);
+        }
         startStopBtn.innerHTML = "Start";
         running = false;
     }
@@ -61,4 +63,18 @@ function getShowTime() {
     
     // Update the display
     display.innerHTML = hours + ":" + minutes + ":" + seconds + ":" + milliseconds;
+}
+
+
+function saveTimeToDatabase(seconds) {
+    fetch('/save-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ duration: seconds }), // Sending the time
+    })
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch((error) => console.error('Error:', error));
 }

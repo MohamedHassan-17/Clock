@@ -1,22 +1,19 @@
 const mysql = require('mysql2');
-
-
-
 const express = require('express');
 const app = express();
 const PORT = 3000;
 
 
 
-// 1. Configure the connection details
+//  Configure the connection details
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',           // Your MySQL username
-  password: '1313', // Your MySQL password
-  database: 'stopwatch' // The name of the DB where you created the tables
+  user: 'root',           
+  password: '1313', 
+  database: 'stopwatch' 
 });
 
-// 2. Attempt to connect
+//  Attempt to connect
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting to the database: ' + err.stack);
@@ -34,4 +31,25 @@ app.listen(PORT, () => {
 });
 
 
+// updating the database
+
+app.use(express.json());
+
+app.post('/save-session', (req, res) => {
+    const duration = req.body.duration; // The time from your stopwatch
+
+    // This query finds user "17" and uses their ID to create the session
+    const sql = `
+        INSERT INTO sessions (user_id, duration_milliseconds) 
+        SELECT id, ? FROM users WHERE username = '17'
+    `;
+
+    connection.query(sql, [duration], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error saving session");
+        }
+        res.send({ message: "Session saved for user 17!", sessionId: result.insertId });
+    });
+});
 
