@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="user-control">
+    <label for="userSelect">Select User:</label>
+    <select id="userSelect">
+        <option value="Guest">Guest</option> 
+        <option value="17">17</option>
+    </select>
+    <p>Current User: <span id="currentUserDisplay">Guest</span></p>
+</div>
     <div class="stopwatch-container">
         <div id="display">00:00:00:000</div>
         <button id="startStopBtn">Start</button>

@@ -36,20 +36,20 @@ app.listen(PORT, () => {
 app.use(express.json());
 
 app.post('/save-session', (req, res) => {
-    const duration = req.body.duration; // The time from your stopwatch
+    // We get both pieces of data from the request body
+    const { duration, username } = req.body; 
 
-    // This query finds user "17" and uses their ID to create the session
     const sql = `
         INSERT INTO sessions (user_id, duration_milliseconds) 
-        SELECT id, ? FROM users WHERE username = '17'
+        SELECT id, ? FROM users WHERE username = ?
     `;
 
-    connection.query(sql, [duration], (err, result) => {
+    connection.query(sql, [duration, username], (err, result) => {
         if (err) {
             console.error(err);
-            return res.status(500).send("Error saving session");
+            return res.status(500).send("Database error");
         }
-        res.send({ message: "Session saved for user 17!", sessionId: result.insertId });
+        res.send({ message: `Saved for ${username}` });
     });
 });
 

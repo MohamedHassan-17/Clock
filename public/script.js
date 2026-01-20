@@ -9,6 +9,10 @@ const display = document.getElementById("display");
 const startStopBtn = document.getElementById("startStopBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+const userSelect = document.getElementById("userSelect");
+const currentUserDisplay = document.getElementById("currentUserDisplay");
+let currentUsername = "Guest"; // Default username
+
 // adding event listeners to buttons
 startStopBtn.addEventListener("click", startStop);
 resetBtn.addEventListener("click", reset);
@@ -66,13 +70,22 @@ function getShowTime() {
 }
 
 
+
+// Update currentUsername whenever the dropdown changes
+userSelect.addEventListener("change", (e) => {
+    currentUsername = e.target.value;
+    currentUserDisplay.innerText = currentUsername;
+});
 function saveTimeToDatabase(seconds) {
     fetch('/save-session', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ duration: seconds }), // Sending the time
+        body: JSON.stringify({ 
+            duration: seconds,
+            username: currentUsername
+         }), // Sending the time
     })
     .then(response => response.json())
     .then(data => console.log('Success:', data))
