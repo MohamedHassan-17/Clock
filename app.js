@@ -53,3 +53,34 @@ app.post('/save-session', (req, res) => {
     });
 });
 
+
+// Saving new users
+app.post('/add-user', (req, res) => {
+    const { username } = req.body;
+
+    const sql = "INSERT INTO users (username) VALUES (?)";
+
+    connection.query(sql, [username], (err, result) => {
+        if (err) {
+            // Check for error code 1062 (Duplicate entry)
+            if (err.errno === 1062) {
+                return res.status(400).send("User already exists!");
+            }
+            return res.status(500).send("Database error");
+        }
+        res.send({ message: "User added!", id: result.insertId });
+    });
+});
+
+// Fetching users for the dropdown
+app.get('/get-users', (req, res) => {
+    const sql = "SELECT username FROM users";
+    
+    connection.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).send("Error fetching users");
+        }
+        
+        res.json(results); 
+    });
+});

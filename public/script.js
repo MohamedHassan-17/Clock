@@ -1,3 +1,4 @@
+// time control variables
 let startTime;
 let updatedTime;
 let difference = 0;
@@ -5,13 +6,19 @@ let tInterval;
 let savedTime = 0;
 let running = false;
 
+//  stop watch elements
 const display = document.getElementById("display");
 const startStopBtn = document.getElementById("startStopBtn");
 const resetBtn = document.getElementById("resetBtn");
 
+// user control elements
 const userSelect = document.getElementById("userSelect");
 const currentUserDisplay = document.getElementById("currentUserDisplay");
 let currentUsername = "Guest"; // Default username
+
+// adding new user elements
+const addUserBtn = document.getElementById("addUserBtn");
+const newUsernameInput = document.getElementById("newUsername");
 
 // adding event listeners to buttons
 startStopBtn.addEventListener("click", startStop);
@@ -91,3 +98,55 @@ function saveTimeToDatabase(seconds) {
     .then(data => console.log('Success:', data))
     .catch((error) => console.error('Error:', error));
 }
+
+
+
+
+
+addUserBtn.addEventListener("click", () => {
+    const name = newUsernameInput.value.trim();
+    if (!name) return alert("Please enter a name");
+
+    fetch('/add-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: name }),
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        newUsernameInput.value = ""; // Clear the input
+        loadUsers(); // Refresh the user list
+    })
+    .catch(err => console.error("Error:", err));
+});
+
+
+// Function to load users into the dropdown
+
+function loadUsers() {
+    fetch('/get-users')
+        .then(res => res.json())
+        .then(users => {
+            // Clear existing options first
+            userSelect.innerHTML = "";
+
+            users.forEach(user => {
+                // Create a new <option> for each user
+                const option = document.createElement("option");
+                option.value = user.username;
+                option.textContent = user.username;
+                userSelect.appendChild(option);
+            });
+
+            // Update the current user display to the first one in the list
+            if (users.length > 0) {
+                currentUsername = users[0].username;
+                document.getElementById("currentUserDisplay").innerText = currentUsername;
+            }
+        })
+        .catch(err => console.error("Could not load users:", err));
+}
+
+// Call this function when the page loads
+window.onload = loadUsers;

@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- User Registration and Selection Area -->
+    <div class="registration-area">
+    <input type="text" id="newUsername" placeholder="Enter new username">
+    <button id="addUserBtn">Add User</button>
+</div>
     <div class="user-control">
     <label for="userSelect">Select User:</label>
     <select id="userSelect">
@@ -15,6 +20,8 @@
     </select>
     <p>Current User: <span id="currentUserDisplay">Guest</span></p>
 </div>
+
+<!-- stopwatch section  -->
     <div class="stopwatch-container">
         <div id="display">00:00:00:000</div>
         <button id="startStopBtn">Start</button>
